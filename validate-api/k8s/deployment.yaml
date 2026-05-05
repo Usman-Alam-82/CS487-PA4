@@ -12,9 +12,10 @@ spec:
       labels:
         app: validate-api
     spec:
+      imagePullSecrets:
+      - name: acr-secret
       containers:
       - name: validate-api
-        # TODO: Replace <rollnum> with your actual roll number
         image: pa426100383.azurecr.io/validator-api:v1
         ports:
         - containerPort: 8080
@@ -22,5 +23,3 @@ spec:
           requests:
             cpu: "250m"
             memory: "500Mi"
-      imagePullSecrets:
-      - name: acr-secret
