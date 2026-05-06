@@ -43,12 +43,20 @@ def report_activity(order: dict) -> str:
     image    = os.environ["REPORT_IMAGE"]
     order_id = order["order_id"]
 
+<<<<<<< HEAD
+=======
+    # FIX 1: ACI name must be lowercase alphanumeric and hyphens only, max 63 chars
+>>>>>>> f2199b074acc99bac00fb9b2baf624c88a098919
     safe_name = re.sub(r"[^a-z0-9-]", "-", order_id.lower())[:50]
     name = f"ci-report-{safe_name}"
 
     credential = DefaultAzureCredential()
     client = ContainerInstanceManagementClient(credential, sub_id)
 
+<<<<<<< HEAD
+=======
+    # FIX 2: resourceGroups must have capital G in the resource ID
+>>>>>>> f2199b074acc99bac00fb9b2baf624c88a098919
     rollnum = rg.split("-")[-1]
     mi_id = f"/subscriptions/{sub_id}/resourceGroups/{rg}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mi-pa4-{rollnum}"
 
@@ -72,16 +80,30 @@ def report_activity(order: dict) -> str:
                 requests=ResourceRequests(cpu=1.0, memory_in_gb=1.5)
             ),
             environment_variables=[
+<<<<<<< HEAD
                 EnvironmentVariable(name="ORDER_ID",            value=order_id),
                 EnvironmentVariable(name="ORDER_JSON",          value=json.dumps(order)),
                 EnvironmentVariable(name="STORAGE_ACCOUNT_URL", value=os.environ["STORAGE_ACCOUNT_URL"]),
                 EnvironmentVariable(name="AZURE_CLIENT_ID",     value=os.environ["AZURE_CLIENT_ID"]),
+=======
+                EnvironmentVariable(name="ORDER_ID",           value=order_id),
+                EnvironmentVariable(name="ORDER_JSON",         value=json.dumps(order)),
+                EnvironmentVariable(name="STORAGE_ACCOUNT_URL",value=os.environ["STORAGE_ACCOUNT_URL"]),
+                EnvironmentVariable(name="AZURE_CLIENT_ID",    value=os.environ["AZURE_CLIENT_ID"]),
+>>>>>>> f2199b074acc99bac00fb9b2baf624c88a098919
             ]
         )]
     )
 
+<<<<<<< HEAD
     client.container_groups.begin_create_or_update(rg, name, group).result()
 
+=======
+    # Create ACI and wait for it to finish
+    client.container_groups.begin_create_or_update(rg, name, group).result()
+
+    # Poll up to 5 minutes (60 x 5s)
+>>>>>>> f2199b074acc99bac00fb9b2baf624c88a098919
     final_state = None
     for _ in range(60):
         info = client.container_groups.get(rg, name)
@@ -91,12 +113,20 @@ def report_activity(order: dict) -> str:
             break
         time.sleep(5)
 
+<<<<<<< HEAD
+=======
+    # Always clean up ACI so it stops billing
+>>>>>>> f2199b074acc99bac00fb9b2baf624c88a098919
     try:
         client.container_groups.begin_delete(rg, name)
     except Exception:
         pass
 
     if final_state == "Failed":
+<<<<<<< HEAD
         raise Exception(f"Report ACI {name} failed.")
+=======
+        raise Exception(f"Report ACI {name} failed. Check ACI logs in Azure Portal.")
+>>>>>>> f2199b074acc99bac00fb9b2baf624c88a098919
 
     return f"{os.environ['STORAGE_ACCOUNT_URL']}/reports/{order_id}.pdf"
