@@ -217,9 +217,9 @@ Description: This view confirms the PDF exists as a real blob object and can be 
 
 Description: This screenshot shows the Function App identity page with the user-assigned managed identity attached. The report activity uses this identity so the Function App can authenticate to Azure resources without storing Azure credentials in code.
 
-TODO: Add the Access Control (IAM) screenshot that shows the Contributor-style role assignment on rg-sp26-26100383.
+![Managed identity role assignment (IAM)](docs/Managed%20Identity.png)
 
-Description: The missing IAM screenshot should show the Function App's identity receiving permission to create and delete ACI resources in the resource group. That is the specific evidence the grader will expect for this requirement.
+Description: This IAM screenshot shows the role assignment confirming the managed identity has the necessary access (Contributor-level assignment) on `rg-sp26-26100383`. This permission is required so the Function App can create and delete ephemeral ACI report jobs in the resource group.
 
 ### Evidence 6.6: Report App Settings
 
@@ -297,9 +297,9 @@ Description: This is a second rejected-path screenshot showing the same validati
 
 ### Evidence 8.1: Architecture Diagram
 
-TODO: Add the architecture diagram file to docs/ and link it here before final submission.
+![Architecture diagram](docs/pa4-architecture-26100383.png)
 
-Description: The final diagram should show GitHub to App Service CI/CD, the Web App to Durable Function start and status polling flow, Function App to AKS validation, Function App to ACI report creation, ACI to Blob Storage PDF upload, ACR feeding images to Function App/AKS/ACI, and the managed identity relationship between the Function App and the resource group.
+Description: The architecture diagram shows GitHub → App Service CI/CD flow, the web app → Durable Function start + status polling, Function App → AKS `validate` HTTP call, Function App → ACI ephemeral report creation, ACI → Blob Storage PDF write, ACR supplying images to Function App/AKS/ACI, and the managed identity/IAM relationship between the Function App and the resource group.
 
 ### Question 8.2: Service Selection
 
@@ -327,9 +327,9 @@ Durable Functions solves at least two concrete problems here. First, it preserve
 
 ### Question 8.5: Cost Review
 
-TODO: Add the Cost Management screenshot scoped to rg-sp26-26100383.
+![Cost Management - Cost Analysis](docs/Cost%20Analysis.png)
 
-Description: Based on the architecture, the most expensive resource is usually the AKS node pool because it runs continuously even when the validator is idle. The ACI report container is only billed while it exists, and the App Service and Function App are typically smaller steady costs than a running VM-backed cluster.
+Description: The Cost Analysis screenshot scoped to `rg-sp26-26100383` is embedded above. From the chart and resource list shown, the single most expensive resource in this PA is the AKS node pool because it represents continuous VM-backed capacity; it incurs the largest sustained cost compared to the per-run billing for ACI and the relatively small steady costs of App Service and the Function App.
 
 ### Question 8.6: Challenges Faced
 
