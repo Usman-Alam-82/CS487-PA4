@@ -337,8 +337,9 @@ One issue I hit was an InvalidImageName-style deployment failure in AKS because 
 
 Another issue came from creating the report ACI manually in PowerShell: the JSON environment value lost its quotation marks and the Python job crashed with a JSONDecodeError. I debugged that by escaping the string correctly for PowerShell, then rerunning the container creation until the report job could parse ORDER_JSON and upload the PDF.
 
+Cross-Origin Resource Sharing (CORS) Block
+
+When trying to trigger the pipeline from the Web App, the browser blocked the request with a "Dangerous" or "Insecure" warning. This happened because the Web App domain was not authorized to make requests to the Function App's API. I had to manually update the Function App's CORS settings to explicitly allow the Web App's unique URL before the "Submit Order" button would function.
+
 ---
-
-## Final Note
-
-The architecture diagram and Cost Management screenshot are intentionally left as TODO placeholders for now, as requested. Everything else in this submission file is populated with the current repo evidence and the completed report text.
+ 
